@@ -7,6 +7,8 @@ import Lupa from "../assets/lupa.png"
 function Home(){
 
     let [cep, setCep] = useState('')
+    let [historico, setHistorico] = useState([])
+    
 
     const submitConsult = (e) => {
         e.preventDefault()
@@ -17,16 +19,20 @@ function Home(){
         document.getElementById('input').value = ''
         axios.get(`https://viacep.com.br/ws/${cep}/json/`).then((res)=>{
 
-            let data = ['1']
-
-            data.unshift(res.data.cep)
-
             if(res.data.erro === true){
                 openErrorCard()
             } else {
                 
-                print(res.data.cep,res.data.localidade,res.data.bairro,res.data.uf,res.data.logradouro,res.data.ddd,res.data.ibge,res.data.siafi, res.data.complemento)
+                if(historico.length < 7){
+                    setHistorico([{cep: res.data.cep}, ...historico])
+                } else {
+                    setHistorico([{cep: res.data.cep}, historico[0], historico[1], historico[2], historico[3], historico[4], historico[5], historico[6]])
+                }
 
+                document.getElementById('text-3').style.display = 'block'
+
+                print(res.data.cep,res.data.localidade,res.data.bairro,res.data.uf,res.data.logradouro,res.data.ddd,res.data.ibge,res.data.siafi, res.data.complemento)
+                
             }
 
         }).catch((err) => {
@@ -34,8 +40,10 @@ function Home(){
         })
     }
 
-    const buttonConsult= (cep) => {
-        consult()
+    const buttonConsult = () => {
+        axios.get(`https://viacep.com.br/ws/${cep}/json/`).then((res)=>{
+            print(res.data.cep,res.data.localidade,res.data.bairro,res.data.uf,res.data.logradouro,res.data.ddd,res.data.ibge,res.data.siafi, res.data.complemento)
+        })
     }
 
     const print = (cep, city, neighborhood, state, street, ddd, ibge, siafi, complemento) => {
@@ -143,13 +151,11 @@ function Home(){
                             <input placeholder='Informe o CEP' id='input' onChange={(e)=> setCep(e.target.value.replace(/[^0-9]/g,''))} type="text"/>
                             <button id='button-lupa'><img id='img-lupa' src={Lupa} alt="" /></button>
                     </form>
-                        <h3 id='text-3'>Principais CEPS</h3>
+                        <h3 id='text-3'>Histórico de CEPS</h3>
                         <div id='buttons'>
-                            <button onMouseOver={() => setCep('89595000')} onClick={() => { buttonConsult()}}>Salto Veloso, SC</button>
-                            <button onMouseOver={() => setCep('01153000')} onClick={() => { buttonConsult()}}>São Paulo, SP</button>
-                            <button onMouseOver={() => setCep('80250000')} onClick={() => { buttonConsult()}}>Curitiba, PR</button>
-                            <button onMouseOver={() => setCep('88015973')} onClick={() => { buttonConsult()}}>Florianópilos, SC</button>
-                            <button onMouseOver={() => setCep('89560001')} onClick={() => { buttonConsult()}}>Videira, SC</button>
+                            {historico.map((cep, index) => (
+                                <button onClickCapture={() => setCep(cep.cep.replace(/[^0-9]/g,''))} onClick={buttonConsult} key={index}>{cep.cep}</button>
+                            ))}
                         </div>
                     </div>
                 </div>
