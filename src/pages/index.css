@@ -55,6 +55,7 @@ header{
     color: #ffee00;
     margin-left: 30px;
     margin-right: 30px;
+    display: none;
 }
 
 form{
