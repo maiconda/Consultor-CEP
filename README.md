@@ -6,7 +6,7 @@
 
 O projeto em questão se trata de uma plataforma de consulta de CEP, desenvolvido com React.JS e utilizando a API ViaCep, onde é possivel receber diversas informações de um endereço através do CEP. O projeto foi desenvolvido com o objetivo de demonstrar e praticar minhas habiliades como desenvolvedor Front-End e com o React.
 
-É possível acessar a página a partir do botão a seguir.
+É possível acessar o projeto a partir do botão a seguir.
 
 [![Blog](https://img.shields.io/badge/Consulta_CEP-000000?style=for-the-badge&logo=About.me&logoColor=white)](https://consultor-cep.netlify.app/)
 
